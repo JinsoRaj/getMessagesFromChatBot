@@ -14,9 +14,9 @@ bot.chatType(["group", "supergroup"]).on("message:text", async (ctx) => {
 
     //cal db write
     await addMessage(ctx);
-    await ctx.reply("stored to db",{
-        reply_to_message_id: ctx.message.message_id
-    })
+    // await ctx.reply("stored to db",{
+    //     reply_to_message_id: ctx.message.message_id
+    // })
 });
 
 //Local
