@@ -44,8 +44,8 @@ export async function addMessage(ctx){
     // if not, add to db.
     await messages.insertOne({
         _id: ctx.message.message_id,
-        from: ctx.message_id.from,
-        text: ctx.message_id.text
+        from: ctx.message.from,
+        text: ctx.message.text
     }).then(() =>{
         return true;
     }).catch((err) =>{
