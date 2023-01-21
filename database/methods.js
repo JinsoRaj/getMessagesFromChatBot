@@ -43,9 +43,12 @@ export async function removeChat(chatId){
 export async function addMessage(ctx){
     // if not, add to db.
     await messages.insertOne({
-        _id: ctx.message.message_id,
+        _id: `${ctx.message.chat.id}`+`${ctx.message.message_id}`,
         from: ctx.message.from,
-        text: ctx.message.text
+        message: ctx.message.text,
+        is_reply: ctx.message.reply_to_message ? true : false,
+        reply_to_message: ctx.message.reply_to_message? ctx.message.reply_to_message : null,
+        date: new Date(ctx.message.date * 1000)
     }).then(() =>{
         return true;
     }).catch((err) =>{
