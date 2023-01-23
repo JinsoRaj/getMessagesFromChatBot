@@ -40,7 +40,7 @@ export async function removeChat(chatId){
 }
 
 // add test and details to db
-export async function addMessage(ctx){
+export async function addText(ctx){
     // if not, add to db.
     await messages.insertOne({
         _id: `${ctx.message.chat.id}`+`${ctx.message.message_id}`,
@@ -56,3 +56,39 @@ export async function addMessage(ctx){
         return false;
     });
 }
+
+export async function addPic(ctx){
+    const file = await ctx.getFile()
+    console.log(file.file_path);
+    // if not, add to db.
+    // await messages.insertOne({
+    //     _id: `${ctx.message.chat.id}`+`${ctx.message.message_id}`,
+    //     from: ctx.message.from,
+    //     message: ctx.message.photo[photo.length],
+    //     is_reply: ctx.message.reply_to_message ? true : false,
+    //     reply_to_message: ctx.message.reply_to_message? ctx.message.reply_to_message : null,
+    //     date: new Date(ctx.message.date * 1000)
+    // }).then(() =>{
+    //     return true;
+    // }).catch((err) =>{
+    //     console.log(`Unable to add msg in DB: ${err}`);
+    //     return false;
+    // });
+}
+export async function addVideo(ctx){
+    // if not, add to db.
+    await messages.insertOne({
+        _id: `${ctx.message.chat.id}`+`${ctx.message.message_id}`,
+        from: ctx.message.from,
+        message: ctx.message.video,
+        is_reply: ctx.message.reply_to_message ? true : false,
+        reply_to_message: ctx.message.reply_to_message? ctx.message.reply_to_message : null,
+        date: new Date(ctx.message.date * 1000)
+    }).then(() =>{
+        return true;
+    }).catch((err) =>{
+        console.log(`Unable to add msg in DB: ${err}`);
+        return false;
+    });
+}
+// .env = prod and dev ? store full path local url to mongo also. then ngrok will success?
