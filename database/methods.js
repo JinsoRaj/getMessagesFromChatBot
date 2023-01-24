@@ -62,7 +62,7 @@ export async function addText(ctx){
 export async function addPic(ctx){
     const file = await ctx.getFile()
 
-    const fileId = ctx.message.photo[ctx.message.photo.length].file_id;
+    const fileId = ctx.message.photo[ctx.message.photo.length - 1].file_id;
     let path = "";
     const devEnv = Deno.env.get("DEV_ENV");
     if(devEnv == "prod"){
