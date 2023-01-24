@@ -1,9 +1,7 @@
 import { chats, messages } from "./db.js";
 import { bot } from "../bot.js";
 
-import { hydrateFiles } from "https://deno.land/x/grammy_files@v1.0.4/mod.ts";
 
-bot.api.config.use(hydrateFiles(bot.token));
 //get all chats from db - Future..
 // export async function getChats(){
 //     const allChatsArray = await chats.find({ _id: { $ne: null } }).toArray();

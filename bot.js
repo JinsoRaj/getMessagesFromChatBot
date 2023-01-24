@@ -2,6 +2,10 @@ import { Bot } from "./deps.js";
 import { addText, addPic, addVideo } from "./database/methods.js";
 //Production
 export const bot = new Bot(Deno.env.get("BOT_TOKEN"));
+
+import { hydrateFiles } from "https://deno.land/x/grammy_files@v1.0.4/mod.ts";
+
+bot.api.config.use(hydrateFiles(bot.token));
 //Local
 //export const bot = new Bot("");
 
