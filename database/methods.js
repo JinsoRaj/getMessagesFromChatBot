@@ -61,34 +61,21 @@ export async function addText(ctx){
 
 export async function addPic(ctx){
     const file = await ctx.getFile()
-    console.log(file.file_path);
-    // Download the file to a temporary location.
-    const path = await file.download();
-    // Print the file path.
-    console.log("File saved at ", path);
-    // const devEnv = Deno.env.get("DEV_ENV");
-    // if(devEnv == "production")
-    // if not, add to db.
-    // await messages.insertOne({
-    //     _id: `${ctx.message.chat.id}`+`${ctx.message.message_id}`,
-    //     from: ctx.message.from,
-    //     message: ctx.message.photo[photo.length],
-    //     is_reply: ctx.message.reply_to_message ? true : false,
-    //     reply_to_message: ctx.message.reply_to_message? ctx.message.reply_to_message : null,
-    //     date: new Date(ctx.message.date * 1000)
-    // }).then(() =>{
-    //     return true;
-    // }).catch((err) =>{
-    //     console.log(`Unable to add msg in DB: ${err}`);
-    //     return false;
-    // });
-}
-export async function addVideo(ctx){
+
+    const fileId = ctx.message.photo[ctx.message.photo.length].file_id;
+    let path = "";
+    const devEnv = Deno.env.get("DEV_ENV");
+    if(devEnv == "prod"){
+        path = file.getUrl();
+    }else{
+        path = await file.download("../downloads/images/");
+    }
     // if not, add to db.
     await messages.insertOne({
         _id: `${ctx.message.chat.id}`+`${ctx.message.message_id}`,
         from: ctx.message.from,
-        message: ctx.message.video,
+        file_id: fileId,
+        message: path,
         is_reply: ctx.message.reply_to_message ? true : false,
         reply_to_message: ctx.message.reply_to_message? ctx.message.reply_to_message : null,
         date: new Date(ctx.message.date * 1000)
@@ -98,5 +85,22 @@ export async function addVideo(ctx){
         console.log(`Unable to add msg in DB: ${err}`);
         return false;
     });
+}
+export async function addVideo(ctx){
+    // if not, add to db.
+    // await messages.insertOne({
+    //     _id: `${ctx.message.chat.id}`+`${ctx.message.message_id}`,
+    //     from: ctx.message.from,
+    //     file_id: fileId,
+    //     message: cpath,
+    //     is_reply: ctx.message.reply_to_message ? true : false,
+    //     reply_to_message: ctx.message.reply_to_message? ctx.message.reply_to_message : null,
+    //     date: new Date(ctx.message.date * 1000)
+    // }).then(() =>{
+    //     return true;
+    // }).catch((err) =>{
+    //     console.log(`Unable to add msg in DB: ${err}`);
+    //     return false;
+    // });
 }
 // .env = prod and dev ? store full path local url to mongo also. then ngrok will success?
