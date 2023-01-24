@@ -1,5 +1,9 @@
 import { chats, messages } from "./db.js";
+import { bot } from "../bot.js";
 
+import { hydrateFiles } from "https://deno.land/x/grammy_files@v1.0.4/mod.ts";
+
+bot.api.config.use(hydrateFiles(bot.token));
 //get all chats from db - Future..
 // export async function getChats(){
 //     const allChatsArray = await chats.find({ _id: { $ne: null } }).toArray();
@@ -60,6 +64,12 @@ export async function addText(ctx){
 export async function addPic(ctx){
     const file = await ctx.getFile()
     console.log(file.file_path);
+    // Download the file to a temporary location.
+    const path = await file.download();
+    // Print the file path.
+    console.log("File saved at ", path);
+    // const devEnv = Deno.env.get("DEV_ENV");
+    // if(devEnv == "production")
     // if not, add to db.
     // await messages.insertOne({
     //     _id: `${ctx.message.chat.id}`+`${ctx.message.message_id}`,
