@@ -82,25 +82,35 @@ export async function addPic(ctx){
     }).then(() =>{
         return true;
     }).catch((err) =>{
-        console.log(`Unable to add msg in DB: ${err}`);
+        console.log(`Unable to add pic in DB: ${err}`);
         return false;
     });
 }
 export async function addVideo(ctx){
+    const file = await ctx.getFile()
+
+    const fileId = ctx.message.video.file_id;
+    let path = "";
+    const devEnv = Deno.env.get("DEV_ENV");
+    if(devEnv == "prod"){
+        path = file.getUrl();
+    }else{
+        path = await file.download("../downloads/videos/");
+    }
     // if not, add to db.
-    // await messages.insertOne({
-    //     _id: `${ctx.message.chat.id}`+`${ctx.message.message_id}`,
-    //     from: ctx.message.from,
-    //     file_id: fileId,
-    //     message: cpath,
-    //     is_reply: ctx.message.reply_to_message ? true : false,
-    //     reply_to_message: ctx.message.reply_to_message? ctx.message.reply_to_message : null,
-    //     date: new Date(ctx.message.date * 1000)
-    // }).then(() =>{
-    //     return true;
-    // }).catch((err) =>{
-    //     console.log(`Unable to add msg in DB: ${err}`);
-    //     return false;
-    // });
+    await messages.insertOne({
+        _id: `${ctx.message.chat.id}`+`${ctx.message.message_id}`,
+        from: ctx.message.from,
+        file_id: fileId,
+        message: path,
+        is_reply: ctx.message.reply_to_message ? true : false,
+        reply_to_message: ctx.message.reply_to_message? ctx.message.reply_to_message : null,
+        date: new Date(ctx.message.date * 1000)
+    }).then(() =>{
+        return true;
+    }).catch((err) =>{
+        console.log(`Unable to add video in DB: ${err}`);
+        return false;
+    });
 }
 // .env = prod and dev ? store full path local url to mongo also. then ngrok will success?
